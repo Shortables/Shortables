@@ -14,39 +14,23 @@ module.exports = function(sequelize, DataTypes){
 			type: DataTypes.STRING,
 			defaultValue: null
 		},
+		type: {
+			type: DataTypes.STRING,
+			defaultValue: 'user'
+		},
 		picture: {
 			type: DataTypes.STRING,
 			defaultValue: null
 		}
 	});
 
-	// let User = sequelize.define("User",{
-	// 	username: {
-	// 		type: DataTypes.STRING,
-	// 		allowNull: false,
-	// 		validate: {
-	// 			is: /^[a-zA-Z][a-zA-Z0-9_]*$/i,
-	// 			len:[1,20]
-	// 		}
-	// 	},
-	// 	email: {
-	// 		type: DataTypes.STRING,
-	// 		allowNull: false,
-	// 		validate: {	isEmail: true }
-	// 	},
-	// 	password:  {
-	// 		type: DataTypes.STRING,
-	// 		allowNull: false,
-	// 		validate: {
-	// 			is: /^[a-zA-Z][a-zA-Z0-9_]*$/i,
-	// 			len:[1,20]
-	// 		}			
-	// 	},
-	// 	picture: {
-	// 		type: DataTypes.STRING,
-	// 		defaultValue: null
-	// 	}
-	// });
+	User.associate = function(models) {
+	// Associating User with Posts
+	// When User is deleted, also delete any associated Posts
+		User.hasMany(models.Post, {
+			onDelete: "cascade"
+		});
+	};
 
 	return User;
 }

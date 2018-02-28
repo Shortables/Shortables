@@ -21,10 +21,10 @@ auth_router.post('/register', function(req, res, next) {
 			return res.render("register", { title: "Sorry. That username already exists. Try again.", users:null});
 		};
 
-  		console.log(registeredUser+"===");
+  		// console.log(registeredUser+"===");
 		registeredUser.email = req.body['email'];
-		// registeredUser.firstname = req.body['firstname']||null;
-		// registeredUser.lastname = req.body['lastname']||null;
+		registeredUser.firstname = req.body['firstname']||null;
+		registeredUser.lastname = req.body['lastname']||null;
 
     	registeredUser.save();
 
@@ -36,8 +36,8 @@ auth_router.post('/register', function(req, res, next) {
 
 auth_router.get('/login', (req, res) => {
     // res.render('login', { user : req.user, error : req.flash('error')});
-    res.render('login', { user : req.user });
-    // res.render('login');
+    // res.render('login', { user : req.user });
+    res.render('login');
 });
 
 // auth_router.post('/login', passport.authenticate('local'), function(req, res) {
