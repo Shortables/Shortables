@@ -3,14 +3,6 @@ var db			= require("../models");
 
 module.exports = function(app) {
 
-	// app.get('/', function(req, res){
-	//     res.render('index', { user : req.user });
-	// });
-
-	app.get('/register', (req, res) => {
-		res.render('register', { });
-	});
-
 	app.post('/register', function(req, res, next) {
 		db.User.register(
 			req.body['username'], 
@@ -37,12 +29,6 @@ module.exports = function(app) {
 				});
 			}
 		);
-	});
-
-	app.get('/login', (req, res) => {
-		// res.render('login', { user : req.user, error : req.flash('error')});
-		// res.render('login', { user : req.user });
-		res.render('login');
 	});
 
 	// app.post('/login', passport.authenticate('local'), function(req, res) {

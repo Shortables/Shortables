@@ -1,8 +1,6 @@
 $(function() {
 // $(document).ready(function() {
   
-  console.log("ready!");
-
   $("#new_post_submit").on("click", addShortable);
 
   function addShortable(ev){
@@ -14,12 +12,12 @@ $(function() {
     };
     // console.log("trying to create new post:"+JSON.stringify(shortable));
     //!!!validate input
-    $.ajax("/add_post", {
+    $.ajax("/api/shortable/add", {
       type: "POST",
       data: shortable
 
     }).then( function(){
-        window.location.pathname = "/shortables/all";
+        window.location.pathname = "/api/all";
     });
   }
 
