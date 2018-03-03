@@ -7,3 +7,37 @@ footer {
     bottom: 0;
     width: 100%;
 }
+
+nav, footer {
+    background-color: #104E83;
+    color: white;
+}
+
+.navbar-brand {
+    font-family: 'Courgette', cursive;
+    font-size: 22px;
+}
+
+.box {
+    width: 40%;
+    border: 2px solid grey;
+    padding: 30px;
+    padding-bottom: 45px;
+}
+
+.btn {
+    border: 1px solid grey;
+    float: right;
+    position: relative;
+}
+
+p {
+    color: black;
+    font-family: Avenir, sans-serif;
+}
+
+h1, h2, h3 {
+    color: ;
+    font-family: ;
+    font-size: ;
+}
