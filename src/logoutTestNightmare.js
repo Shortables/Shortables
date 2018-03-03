@@ -12,9 +12,11 @@ new Nightmare({ show: true })
 // click log in button
 .click('#login-btn')
 // wait 1s
-.wait(1000)
-// take a screenshot of the result
-.screenshot("login.png")
+.wait(3000)
+// click log out button
+.click('#nav-logout')
+// take screenshot
+.screenshot("logout.png")
 // end
 .end()
 .then(function() {
