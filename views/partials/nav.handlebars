@@ -15,18 +15,18 @@
         </li>
         {{#if user }}
             <li class="nav-item">
-              <a class="nav-link" href="/upload">Upload</a>
+              <a id="nav-upload" class="nav-link" href="/upload">Upload</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="/logout">Logout</a>
+              <a id="nav-logout" class="nav-link" href="/logout">Logout</a>
             </li>
         {{/if}}
         {{#unless user }}
             <li class="nav-item">
-              <a class="nav-link" href="/login">Login</a>
+              <a id="nav-login" class="nav-link" href="/login">Login</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="/register">Register</a>
+              <a id="nav-register" class="nav-link" href="/register">Register</a>
             </li>
         {{/unless}}
       </ul>
