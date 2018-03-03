@@ -16,7 +16,7 @@
     "express-handlebars": "^3.0.0",
     "express-session": "^1.15.6",
     "mysql2": "^1.5.2",
-    "npm": "^5.7.1",
+    "nightmare": "^2.10.0",
     "passport": "^0.4.0",
     "passport-local-sequelize": "^0.8.0",
     "sequelize": "^4.33.4"
