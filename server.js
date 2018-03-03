@@ -4,8 +4,8 @@ var db 				= require("./models");
 var bodyParser 		= require("body-parser");
 var cookieParser 	= require('cookie-parser');
 var exphbs 			= require("express-handlebars");
-var routes 			= require("./controllers/shortables.js");
-var auth_routes 	= require("./controllers/auth.js");
+// var auth_routes 	= require("./controllers/auth.js");
+// var routes 			= require("./controllers/shortables.js");
 
 var passport 		= require('passport');
 
@@ -32,11 +32,14 @@ passport.use(db.User.createStrategy());
 passport.serializeUser(db.User.serializeUser());
 passport.deserializeUser(db.User.deserializeUser());
 
-app.use(routes);
-app.use(auth_routes);
+// app.use(routes);
+// app.use(auth_routes);
 
 app.engine("handlebars", exphbs({ defaultLayout: "main" }));
 app.set("view engine", "handlebars");
+
+require("./controllers/auth.js")(app);
+require("./controllers/shortables.js")(app);
 
 db.sequelize.sync().then( function(){
 	app.listen(PORT, function(){
