@@ -38,6 +38,7 @@ passport.deserializeUser(db.User.deserializeUser());
 app.engine("handlebars", exphbs({ defaultLayout: "main" }));
 app.set("view engine", "handlebars");
 
+require("./controllers/http_routes.js")(app);
 require("./controllers/auth.js")(app);
 require("./controllers/shortables.js")(app);
 
