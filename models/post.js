@@ -24,9 +24,13 @@ module.exports = function(sequelize, DataTypes){
 			type: DataTypes.INTEGER,
 			defaultValue: 0
 		},
-		voted: {
+		voted: {// nomber of voted users
 			type: DataTypes.INTEGER,
 			defaultValue: 0
+		},
+		published: {
+			type: DataTypes.BOOLEAN,
+			defaultValue: false
 		}
 	});
 
