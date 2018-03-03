@@ -8,3 +8,7 @@ footer {
     width: 100%;
 }
 
+.navbar-brand {
+    font-family: 'Courgette', cursive;
+    font-size: 22px;
+}
