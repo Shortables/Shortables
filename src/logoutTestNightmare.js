@@ -6,11 +6,11 @@ new Nightmare({ show: true })
 // go to login page
 .click('#nav-login')
 // enter user name
-.type('#loginName', 'loginNightmare')
+.type('#login-name', 'loginNightmare')
 // enter password
-.type('#loginPw', 'passw0rd')
+.type('#login-pw', 'passw0rd')
 // click log in button
-.click('#loginBtn')
+.click('#login-btn')
 // wait 1s
 .wait(3000)
 // click log out button

@@ -6,20 +6,20 @@ new Nightmare({ show: true })
 // go to login page
 .click('#nav-register')
 // enter email address
-.type('#addEmail', 'abc@123.com')
+.type('#add-email', 'abc@123.com')
 // enter first name
-.type('#addFirst', 'Login')
+.type('#add-first', 'Login')
 // enter last name
-.type('#addLast','Nightmare')
+.type('#add-last','Nightmare')
 // enter user name
-.type('#addUserName', 'loginNightmare')
+.type('#add-username', 'loginNightmare')
 // enter password
-.type('#addPassword', 'passw0rd')
+.type('#add-password', 'passw0rd')
 // click sign up button
-.click('#signUp')
+.click('#sign-up')
 // wait 5 seconds
 .wait(5000)
-// take screenshot save to current dir - 
+// take screenshot save to current dir
 .screenshot("userExists.png")
 // end test
 .end()
