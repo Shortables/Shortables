@@ -2,11 +2,24 @@ const db = require("../models");
 
 module.exports = function(app) {
 
-	app.get('/', function(req, res){
-	    res.render('index', { user : req.user });
-	});
+    app.get('/', (req, res) => {
+        posts = ['first post', 'second post', 'third post']
+        res.render('index', { user : req.user, posts : posts });
+    });
 
-	app.get("/shortables/all", function(req, res) {
+    app.get('/login', (req, res) => {
+        res.render('login', { user : req.user });
+    });
+
+    app.get('/register', (req, res) => {
+        res.render('register', { user : req.user });
+    });
+
+    app.get('/upload', (req, res) => {
+        res.render('upload', { user : req.user });
+    });
+
+    app.get("/shortables/all", function(req, res) {
 //+include UserPost if authorised for voting and subscribing buttons
 		let user_attr = ['username','firstname','lastname','picture'];
 		db.Post.findAll({
