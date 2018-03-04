@@ -76,13 +76,12 @@ module.exports = function(app) {
 			attributes: post_attr,
 			where: query,
 			limit: 100,
-			// order: [['rating']],
 			order: [['rating','DESC'],['createdAt', 'DESC']],
 			include: [{model: db.User, attributes: user_attr}]
-			// group: [db.Sequelize.fn('date_trunc', 'day', db.Sequelize.col('createdAt'))]
+
 		}).then(function(shortables) {
 			if(req.user && shortables.length ){
-			//include UserPost if authorised for voting and subscribing buttons
+			//include UserPost if authorised (for voting and subscribing buttons)
 				db.UserPost.findAll({
 					attributes: ['favorites', 'rated', 'PostId'],
 					where: { UserId: req.user.id }
@@ -178,6 +177,7 @@ module.exports = function(app) {
 						where: { id : ids_array },
 						order: [['updatedAt', 'DESC']],
 						include: [{ model: db.User, attributes: user_attr}]
+					
 					}).then(function(shortables) {
 						if(shortables.length){				
 							map_posts( shortables, user_posts );

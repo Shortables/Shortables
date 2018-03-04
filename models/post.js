@@ -31,6 +31,10 @@ module.exports = function(sequelize, DataTypes){
 		published: {
 			type: DataTypes.BOOLEAN,
 			defaultValue: false
+		},
+		cover: {
+			type: DataTypes.STRING,
+			defaultValue: null			
 		}
 	});
 
