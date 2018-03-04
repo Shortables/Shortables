@@ -1,47 +1,55 @@
 const db = require("../models");
 
 function map_posts( post_arr, user_posts_arr ){
-
+	let posts = post_arr;
 	let post_map = {};
 	for(let i=0; i < user_posts_arr.length; i++){
 		let post = user_posts_arr[i];
-		post_map[post.id] = [
+		post_map[post.PostId] = [
 			post.favorites,
 			post.rated
 		];
 	}
-	for(let i=0; i < shortables.length; i++){
-		let post_id = shortables[i].id;
-		shortables[i].fav = post_map[post_id][0];
-		shortables[i].rated = post_map[post_id][1];
+	for(let i=0; i < posts.length; i++){
+		let post_id = posts[i].id;
+		if(post_map[post_id]){
+			let post_obj = posts[i].toJSON();
+			post_obj.fav = post_map[post_id][0];
+			post_obj.rated = post_map[post_id][1];
+			posts[i] = post_obj;
+		}
 	}
-	return short_arr;
+	return posts;
 }
 
 module.exports = function(app) {
 
 	app.get("/api/shortables/all", function(req, res) {
-		let user_attr = ['username','firstname','lastname','picture'];
+		const user_attr = ['username','firstname','lastname','picture'];
 		db.Post.findAll({
 			attributes: ['id','title','content','rating','voted'],
 			where: { published: true },
 			limit: 100,
-			order: [['updatedAt', 'DESC']],
+			order: [['createdAt', 'DESC']],
 			include: [{ model: db.User, attributes: user_attr}]
 
 		}).then(function(shortables) {
-		
 			if(req.user && shortables.length ){
+				console.log("\n+++\n");
 			//include UserPost if authorised for voting and subscribing buttons
 				db.UserPost.findAll({
 					attributes: ['favorites', 'rated', 'PostId'],
 					where: { UserId: req.user.id }
 				}).then(function(user_posts){
-					map_posts( shortables, user_posts )				
+					if(user_posts.length){				
+						map_posts( shortables, user_posts );
+						res.json(shortables);
+					}
 				});
 			}
-
-			res.json(shortables);
+			else{
+				res.json(shortables);
+			}
 
 		});
 	});
@@ -51,25 +59,25 @@ module.exports = function(app) {
 		let query = { published: true };
 		let period = req.params.time;
 		let startDate = new Date();
-		startDate.setDate(oneWeekAgo.getDate() - 7);
 		if(period){
 
 			switch(period){
-				case 'day': startDate.setDate(oneWeekAgo.getDate() - 1); break;
-				case 'week': startDate.setDate(oneWeekAgo.getDate() - 7); break;
-				case 'month': startDate.setDate(oneWeekAgo.getDate() - 30); break;
+				case 'day': startDate.setDate(startDate.getDate() - 1); break;
+				case 'week': startDate.setDate(startDate.getDate() - 7); break;
+				case 'month': startDate.setDate(startDate.getDate() - 30); break;
 			}
 			query.updatedAt = { 
 				[db.Sequelize.Op.gte]: startDate
 			};
 		}
-		let post_attr = ['id','title','content','rating','voted'];
-		let user_attr = ['username','firstname','lastname','picture'];
+		const post_attr = ['id','title','content','rating','voted'];
+		const user_attr = ['id','username','firstname','lastname','picture'];
 		db.Post.findAll({
 			attributes: post_attr,
 			where: query,
 			limit: 100,
-			order: ['rating', 'updatedAt','DESC'],
+			// order: [['rating']],
+			order: [['rating','DESC'],['createdAt', 'DESC']],
 			include: [{model: db.User, attributes: user_attr}]
 			// group: [db.Sequelize.fn('date_trunc', 'day', db.Sequelize.col('createdAt'))]
 		}).then(function(shortables) {
@@ -79,10 +87,15 @@ module.exports = function(app) {
 					attributes: ['favorites', 'rated', 'PostId'],
 					where: { UserId: req.user.id }
 				}).then(function(user_posts){
-					map_posts( shortables, user_posts )				
+					if(user_posts.length){				
+						map_posts( shortables, user_posts );
+						res.json(shortables);
+					}
 				});
 			}
-			res.json(shortables);
+			else{
+				res.json(shortables);
+			}
 		});
 	});
 
@@ -91,8 +104,8 @@ module.exports = function(app) {
 			UserId : req.params.userId,
 			published : true
 		};
-		let post_attr = ['id','title','content','rating'];
-		let user_attr = ['username','firstname','lastname','picture'];
+		const post_attr = ['id','title','content','rating'];
+		const user_attr = ['username','firstname','lastname','picture'];
 		db.Post.findAll({
 			attributes: post_attr,
 			where: condition,
@@ -106,10 +119,15 @@ module.exports = function(app) {
 					attributes: ['favorites', 'rated', 'PostId'],
 					where: { UserId: req.user.id }
 				}).then(function(user_posts){
-					map_posts( shortables, user_posts )				
+					if(user_posts.length){				
+						map_posts( shortables, user_posts );
+						res.json(shortables);
+					}
 				});
 			}
-			res.json(shortables);
+			else{
+				res.json(shortables);
+			}
 		});
 
 	});
@@ -120,25 +138,69 @@ module.exports = function(app) {
 			let condition = {
 				UserId : req.user.id
 			};
-			let post_attr = ['id','title','content','rating', 'voted','published'];
-			let user_attr = ['username','firstname','lastname','picture'];
+			const post_attr = ['id','title','content','rating', 'voted','published'];
+			const user_attr = ['username','firstname','lastname','picture'];
 			db.Post.findAll({
 				attributes: post_attr,
 				where: condition,
-				order: [['updatedAt', 'DESC']],
+				order: [['createdAt', 'DESC']],
 				include: [{ model: db.User, attributes: user_attr}]
 
 			}).then(function(shortables) {
 				res.json(shortables);
 			});
 		}
+		else{
+			res.status(401).send();
+		}
+	});
+
+	app.get("/api/shortables/favorites", function(req, res){
+		if(req.user){
+			// const user_attr = ['username','firstname','lastname','picture'];
+			db.UserPost.findAll({
+				attributes: ['id','rated', 'PostId'],
+				where: { 
+					favorites : true,
+					UserId : req.user.id
+				},
+				order: [['createdAt', 'DESC']]
+
+			}).then(function(user_posts) {
+				if(user_posts.length ){
+					let ids_array = [];
+					for(let i=0; i<user_posts.length; i++){
+						ids_array.push(user_posts[i].PostId);
+					}
+					const user_attr = ['username','firstname','lastname','picture'];
+					db.Post.findAll({
+						attributes: ['id','title','content','rating'],
+						where: { id : ids_array },
+						order: [['updatedAt', 'DESC']],
+						include: [{ model: db.User, attributes: user_attr}]
+					}).then(function(shortables) {
+						if(shortables.length){				
+							map_posts( shortables, user_posts );
+							res.json(shortables);
+						}
+					});
+				}
+				else{
+					res.json(user_posts);
+				}
+
+			});
+		}
+		else{
+			res.status(401).send();
+		}
 	});
 
 	//get a single shortable
 	app.get("/api/shortable/:id", function(req, res) {
 		
-		let post_attr = ['id','title','content','rating', 'voted','published'];
-		let user_attr = ['username','firstname','lastname','picture'];
+		const post_attr = ['id','title','content','rating', 'voted','published'];
+		const user_attr = ['username','firstname','lastname','picture'];
 		db.Post.findOne({
 			attributes: post_attr,
 			where: { id: req.params.id },
@@ -154,7 +216,20 @@ module.exports = function(app) {
 			}
 		});
 	});
+	
+	app.get("/api/shortables/authors", function(req, res){
+		const user_attr = ['id','username','picture'];
+		db.User.findAll({
+			attributes: user_attr,
+			where: { type: 'user' },
+			order: [['createdAt', 'DESC']]
+		}).then(function(authors) {
+			res.json(authors);
+		});
+	});
 
+	//---------- POST and PUT ---------------------//
+	
 	// saving a new shortable
 	app.post("/api/shortable/add", function(req, res) {
 		//required fields: title, content, UserId
@@ -186,11 +261,77 @@ module.exports = function(app) {
 	// voting
 	app.put("/api/shortable/vote/:id", function(req, res){
 		//vote for post (id)
+		db.UserPost.findOne({
+			attributes: ['id', 'favorites', 'rated'],
+			where: { 
+				PostId: req.params.id, 
+				UserId: req.user.id 
+			}
+		}).then(function(user_posts){
+			if( user_posts.length ){
+				//some record for user-post was found, so update it
+				let user_post_id = user_posts[0].id;
+
+				db.UserPost.update(
+					{ rated: 1 },
+					{ where: { id: user_post_id } }
+				).then(function(shortable) {
+					res.json(shortable);
+				});
+			}
+			else{
+				//no record found, so add new record
+				let user_post = {
+					UserId : req.user.id,
+					PostId : req.params.id,
+					voted  : 1,
+					favorites : false
+				};
+				db.UserPost.create(
+					user_post,
+				).then(function(shortable) {
+					res.json(shortable);
+				});
+			}
+		});
 	});
 
-	//adding to fav list
-	app.put("/api/shortable/add-to-favorites", function(req, res){
-
+	//adding to (or deleting from) fav list
+	app.put("/api/shortable/favorites/:action", function(req, res){
+		//action: add or delete
+		db.UserPost.findOne({
+			attributes: ['id', 'favorites', 'rated'],
+			where: { 
+				PostId: req.params.id, 
+				UserId: req.user.id 
+			}
+		}).then(function(user_posts){
+			if( user_posts.length ){
+				//some record for user-post was found, so update it
+				let user_post_id = user_posts[0].id;
+				let new_val = (req.params.action === 'add')? true : false;
+				db.UserPost.update(
+					{ favorites: new_val },
+					{ where: { id: user_post_id } }
+				).then(function(shortable) {
+					res.json(shortable);
+				});
+			}
+			else{
+				//no record found, so add new record
+				let user_post = {
+					UserId : req.user.id,
+					PostId : req.params.id,
+					voted  : 1,
+					favorites : false
+				};
+				db.UserPost.create(
+					user_post,
+				).then(function(shortable) {
+					res.json(shortable);
+				});
+			}
+		});
 	});
 
 	app.get("*", function(req, res) {

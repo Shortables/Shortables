@@ -1,7 +1,7 @@
 module.exports = function(app) {
 
 	app.get('/', function(req, res){
-        posts = ['first post', 'second post', 'third post']
+        posts = ['first post', 'second post', 'third post'];
         res.render('index', { user : req.user, posts : posts });
 	    // res.render('index', { user : req.user });
 	});
