@@ -1,0 +1,19 @@
+<div id="short-"{{id}}>
+	<h3>{{title}}</h3>
+	<div class="short-text">
+		<p>{{content}}</p>
+	</div>
+	<span>Rating: {{rating}}</span><br/>
+	<span>Author: {{User.username}}</span><br/>
+	<span>Created: {{createdAt}}</span><br/>
+ 	{{#if user}}
+		<button class="fav_toggle" data-id="{{id}}" data-fav="{{fav}}">
+	 	{{#if fav}}Delete from favorites{{else}}Add to favorites!{{/if}}
+		</button>
+		{{#unless rated}}
+			<button class="vote_up" data-id="{{id}}">Up</button>
+			<button class="vote_down" data-id="{{id}}">Down</button>
+		{{/unless}}
+	{{/if}}
+</div>
+<hr/>

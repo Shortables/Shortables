@@ -1,0 +1,15 @@
+{{#unless shortables }}
+    <h1>Sorry, nothing found by your request...</h1>
+{{/unless}}
+
+<div id="shortables-list" class="post-list">
+  {{#each shortables}}
+	<div id="short-"{{id}}>
+	  	{{#if ../user}}
+	  		{{> posts/shortable user=../user}}
+	    {{else}}
+			{{> posts/shortable }}
+	  	{{/if}}
+  	</div>
+  {{/each}}
+</div>

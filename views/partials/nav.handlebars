@@ -3,6 +3,7 @@
 <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
   <div class="container">
     <a class="navbar-brand" href="#">Shortables</a>
+    {{#if user}}<span>{{user.username}}</span>{{/if}}
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
@@ -15,24 +16,34 @@
         </li>
         {{#if user }}
             <li class="nav-item">
-              <a id="nav-upload" class="nav-link" href="/upload">Upload</a>
+              <a id="nav-upload" class="nav-link" href="/new-shortable">Add New Post</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="/favorites">Favorites</a>
+              <a class="nav-link" href="/shortables/favorites">Favorites</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/shortables/owner">My Shortables</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="/logout">Logout</a>
             </li>
-        {{/if}}
-        {{#unless user }}
+        {{else}}
             <li class="nav-item">
               <a id="nav-login" class="nav-link" href="/login">Login</a>
             </li>
             <li class="nav-item">
               <a id="nav-register" class="nav-link" href="/register">Register</a>
             </li>
-        {{/unless}}
+        {{/if}}
       </ul>
     </div>
   </div>
 </nav>
+
+<p class="top-menu">
+<a href="/shortables/all">All</a> |
+<a href="/shortables/popular/day">Popular/day</a> |
+<a href="/shortables/popular/week">Popular/week</a> |
+<a href="/shortables/popular/month">Popular/month</a> |
+<a href="/serch-by-author">By Author</a>
+<p>
