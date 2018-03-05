@@ -435,7 +435,7 @@ module.exports = function(app) {
 		});
 	});
 
-	app.get("*", function(req, res) {
-		res.redirect('/shortables/all');
-	});
+	// app.get("*", function(req, res) {
+	// 	res.redirect('/shortables/all');
+	// });
 };
