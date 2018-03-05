@@ -6,7 +6,8 @@ module.exports = function(app) {
 	//     res.render('index', { user : req.user });
 	// });
 	app.get("/", function(req, res) {
-		res.render('login', { user : req.user });
+		// res.render('login', { user : req.user });
+		res.render('register', { user : req.user });
 		// res.redirect('/shortables/all');
 	});
 

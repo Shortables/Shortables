@@ -1,5 +1,6 @@
 var express 		= require("express");
-var session 		= require("express-session");
+// var session 		= require("express-session");
+var session 		= require("cookie-session");
 var db 				= require("./models");
 var bodyParser 		= require("body-parser");
 var cookieParser 	= require('cookie-parser');
@@ -11,7 +12,7 @@ var passport 		= require('passport');
 
 var passportLocalSequelize = require('passport-local-sequelize');
 
-var PORT = process.envPORT || 3000;
+var PORT = process.env.PORT || 3000;
 
 var app = express();
 
