@@ -3,13 +3,11 @@
 {{/unless}}
 
 <div id="shortables-list" class="post-list">
-  {{#each shortables}}
-	<div id="short-"{{id}}>
-	  	{{#if ../user}}
-	  		{{> posts/shortable user=../user}}
-	    {{else}}
-			{{> posts/shortable }}
-	  	{{/if}}
-  	</div>
+	{{#each shortables}}
+		{{#if ../user}}
+			{{> posts/shortable post=this user=../user}}
+		{{else}}
+			{{> posts/shortable post=this}}
+		{{/if}}
   {{/each}}
 </div>

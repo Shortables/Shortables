@@ -174,6 +174,7 @@ module.exports = function(app) {
 	app.get("/shortables/owner", function(req, res){
 		let condition = {};
 		if(req.user){
+		console.log('===getting owner shortables:'+req.user.uername );
 			let condition = {
 				UserId : req.user.id
 			};
@@ -181,12 +182,12 @@ module.exports = function(app) {
 				attributes: POST_ATTR,
 				where: condition,
 				order: [['createdAt', 'DESC']],
-				// include: [{ model: db.User, attributes: USER_ATTR}]
+				include: [{ model: db.User, attributes: USER_ATTR}]
 
 			}).then(function(shortables) {
 				res.render('shortables',{ 
 					user : req.user,
-					shortables: shortables.toJSON() 
+					shortables: shortables
 				});
 				// res.json(shortables);
 			});
@@ -225,7 +226,6 @@ module.exports = function(app) {
 					}).then(function(shortables) {
 						if(user_posts.length){				
 							let posts = map_posts( shortables, user_posts );
-							// res.json(shortables);
 							res.render('shortables',{ 
 								user : req.user,
 								shortables: posts

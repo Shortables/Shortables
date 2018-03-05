@@ -26,7 +26,7 @@ $(function() {
   function deleteFromfavorites(){
     return 0;
   }
-  function voteForShortable(){
-    
+  function voteForShortable(vote){
+
   }
 });
