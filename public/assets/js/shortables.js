@@ -4,6 +4,7 @@ $(function() {
   $("#new_post_submit").on("click", addShortable);
   $("#shortables-list").on("click", ".vote", vote);
   $("#shortables-list").on("click", ".fav_toggle", toggleFavorites);
+  $("#shortables-list").on("click", ".publish_toggle", togglePublished);
 
 // <button class="vote_up" data-id="{{post.id}}">Up</button>
   function addShortable(ev){
@@ -23,8 +24,8 @@ $(function() {
         window.location.pathname = "/api/shortables/all";
     });
   }
+
   function toggleFavorites(){
-    // <button class="fav_toggle" data-id="{{post.id}}" data-fav="{{post.fav}}">
     let post_id = $(this).data("id");
     let fav = $(this).data("fav");
     let user_action = (!fav)? "add" : "delete";
@@ -35,9 +36,26 @@ $(function() {
       location.reload();
     });
   }
-  function togglePublish(){
-    return 0;
+  
+  function togglePublished(){
+    let post_id = $(this).data("id");
+    let pub = $(this).data("pub");
+    if(pub){
+      $.ajax("/api/shortable/unpublish/" + post_id, {
+        type :"PUT"
+      }).then( function(){
+        location.reload();
+      });      
+    }
+    else{
+      $.ajax("/api/shortable/publish/" + post_id, {
+        type :"PUT"
+      }).then( function(){
+        location.reload();
+      });
+    }
   }
+  
   function vote(){
     let post_id = $(this).data("id");
     let user_vote = $(this).data("vote");
