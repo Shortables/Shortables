@@ -5,6 +5,9 @@ module.exports = function(app) {
  //        // res.render('index', { user : req.user, posts : posts });
 	//     res.render('index', { user : req.user });
 	// });
+	app.get("/", function(req, res) {
+		res.redirect('/shortables/all');
+	});
 
 	app.get("/new-shortable", function(req, res) {
 		res.render('new_post', { user : req.user });
