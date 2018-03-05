@@ -19,6 +19,7 @@ function map_posts( post_arr, user_posts_arr ){
 		if(post_map[post_id]){
 			post_obj.fav = post_map[post_id][0];
 			post_obj.rated = post_map[post_id][1];
+			post_obj.rated_val = (post_map[post_id][1]===1)? 1 :0;
 		}
 		else{
 			post_obj.fav = false;
@@ -348,7 +349,7 @@ module.exports = function(app) {
 					let user_post = {
 						UserId : req.user.id,
 						PostId : req.params.id,
-						rated  : 1,
+						rated  : rating_val,
 						favorites : false
 					};
 					db.UserPost.create(

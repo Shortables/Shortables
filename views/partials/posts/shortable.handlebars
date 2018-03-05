@@ -11,7 +11,8 @@
 	 	{{#if post.fav}}Delete from favorites{{else}}Add to favorites!{{/if}}
 		</button>
 		{{#if post.rated}}
-			<p> You rated this post: {{post.rated}}</p>
+			<p> You rated this post: 
+			{{#if post.rated_val}}Up{{else}}Down{{/if}}</p>
 		{{else}}
 			<button class="vote up" data-id="{{post.id}}" data-vote="up">Up</button>
 			<button class="vote down" data-id="{{post.id}}" data-vote="down">Down</button>
