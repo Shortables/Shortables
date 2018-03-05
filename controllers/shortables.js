@@ -279,7 +279,7 @@ module.exports = function(app) {
 		//required fields: title, content, UserId
 		if(req.user){
 			let post = req.body;
-			console.log(req.body);
+			// console.log(req.body);
 			post.UserId = req.user.id;
 			db.Post.create(post).then(function(result) {
 				res.json({ id: result.insertId });
@@ -302,7 +302,9 @@ module.exports = function(app) {
 			res.json(shortable);
 		});
 	});
-	
+	app.put("/api/shortable/publish/:id", function(req, res){
+		//publish toggle
+	});
 	// voting
 	app.put("/api/shortable/vote/:id", function(req, res){
 		//vote for post (id)
@@ -333,10 +335,7 @@ module.exports = function(app) {
 					UserId: req.user.id 
 				}
 			}).then(function(up_result){
-				console.log("\n~~~ getting user_posts\n");
-				console.log(up_result);
 				if( up_result !==null ) {
-					console.log("=found => updating\n");
 					//some record for user-post was found, so update it
 					let user_post_id = up_result.id;
 					//rated 1 is for add, 2 for down
@@ -349,7 +348,6 @@ module.exports = function(app) {
 				}
 				else{
 					//no record found, so add new record
-					console.log("=not found => creating\n");
 					let user_post = {
 						UserId : req.user.id,
 						PostId : req.params.id,
@@ -367,24 +365,23 @@ module.exports = function(app) {
 	});
 
 	//adding to (or deleting from) fav list
-	app.put("/api/shortable/favorites/:action", function(req, res){
+	app.put("/api/shortable/favorites/:id", function(req, res){
 		//action: add or delete
+		let new_val = (req.body.action === 'add')? true : false;
 		db.UserPost.findOne({
 			attributes: ['id', 'favorites', 'rated'],
 			where: { 
 				PostId: req.params.id, 
 				UserId: req.user.id 
 			}
-		}).then(function(user_posts){
-			if( user_posts.length ){
+		}).then(function(up_result){
+			if( up_result !== null ){
 				//some record for user-post was found, so update it
-				let user_post_id = user_posts[0].id;
-				let new_val = (req.params.action === 'add')? true : false;
 				db.UserPost.update(
 					{ favorites: new_val },
-					{ where: { id: user_post_id } }
-				).then(function(shortable) {
-					res.json(shortable);
+					{ where: { id: up_result.id } }
+				).then(function(result) {
+					res.status(200).send();
 				});
 			}
 			else{
@@ -393,12 +390,12 @@ module.exports = function(app) {
 					UserId : req.user.id,
 					PostId : req.params.id,
 					voted  : 0,
-					favorites : false
+					favorites : new_val
 				};
 				db.UserPost.create(
 					user_post,
-				).then(function(shortable) {
-					res.json(shortable);
+				).then(function(result) {
+					res.status(200).send();
 				});
 			}
 		});
