@@ -15,5 +15,18 @@
 			<button class="vote_down" data-id="{{post.id}}">Down</button>
 		{{/unless}}
 	{{/if}}
+	{{#if user.owner}}
+		{{#if post.published}}
+			<p class="published_post">Published &nbsp;</p>
+			<button class="publish_toggle" data-id="{{post.id}}" data-pub="{{post.published}}">
+				Unpublish
+			</button>
+		{{else}}
+			<p class="published_post">Unpublished &nbsp;</p>
+			<button class="publish_toggle" data-id="{{post.id}}" data-pub="{{post.published}}">
+				Publish
+			</button>
+		{{/if}}
+	{{/if}}
 </div>
 <hr/>

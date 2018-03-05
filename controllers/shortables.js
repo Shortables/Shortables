@@ -185,11 +185,12 @@ module.exports = function(app) {
 				include: [{ model: db.User, attributes: USER_ATTR}]
 
 			}).then(function(shortables) {
-				res.render('shortables',{ 
+				let author = req.user;
+				author.owner = true;
+				res.render('shortables',{
 					user : req.user,
 					shortables: shortables
 				});
-				// res.json(shortables);
 			});
 		}
 		else{
