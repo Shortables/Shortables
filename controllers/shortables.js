@@ -225,7 +225,7 @@ module.exports = function(app) {
 						include: [{ model: db.User, attributes: USER_ATTR}]
 					
 					}).then(function(shortables) {
-						if(user_posts.length){				
+						if(shortables && shortables.length){				
 							let posts = map_posts( shortables, user_posts );
 							res.render('shortables',{ 
 								user : req.user,
@@ -332,10 +332,13 @@ module.exports = function(app) {
 					PostId: req.params.id, 
 					UserId: req.user.id 
 				}
-			}).then(function(user_posts){
-				if( user_posts && user_posts.length ){
+			}).then(function(up_result){
+				console.log("\n~~~ getting user_posts\n");
+				console.log(up_result);
+				if( up_result !==null ) {
+					console.log("=found => updating\n");
 					//some record for user-post was found, so update it
-					let user_post_id = user_posts[0].id;
+					let user_post_id = up_result.id;
 					//rated 1 is for add, 2 for down
 					db.UserPost.update(
 						{ rated: rating_val },
@@ -346,6 +349,7 @@ module.exports = function(app) {
 				}
 				else{
 					//no record found, so add new record
+					console.log("=not found => creating\n");
 					let user_post = {
 						UserId : req.user.id,
 						PostId : req.params.id,
