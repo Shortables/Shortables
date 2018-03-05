@@ -187,10 +187,33 @@ module.exports = function(app) {
 			}).then(function(shortables) {
 				let author = req.user;
 				author.owner = true;
-				res.render('shortables',{
-					user : req.user,
-					shortables: shortables
-				});
+				if(shortables && shortables.length){
+					db.UserPost.findAll({
+						attributes: ['id','rated', 'favorites', 'PostId'],
+						where: { 
+							UserId : req.user.id
+						},
+						order: [['createdAt', 'DESC']]
+
+					}).then(function(user_posts){
+						if(user_posts && user_posts.length){
+							let posts = map_posts( shortables, user_posts );
+							res.render('shortables',{ 
+								user : author,
+								shortables: posts
+							});
+						}
+						else{
+							res.render('shortables', {
+								user : author,
+								shortables: shortables
+							});
+						}
+					});
+				}
+				else {
+					res.render('shortables', { user: author });
+				}
 			});
 		}
 		else{
@@ -225,13 +248,11 @@ module.exports = function(app) {
 						include: [{ model: db.User, attributes: USER_ATTR}]
 					
 					}).then(function(shortables) {
-						if(shortables && shortables.length){				
-							let posts = map_posts( shortables, user_posts );
-							res.render('shortables',{ 
-								user : req.user,
-								shortables: posts
-							});
-						}
+						let posts = map_posts( shortables, user_posts );
+						res.render('shortables',{ 
+							user : req.user,
+							shortables: posts
+						});
 					});
 				}
 			});
@@ -303,7 +324,20 @@ module.exports = function(app) {
 		});
 	});
 	app.put("/api/shortable/publish/:id", function(req, res){
-		//publish toggle
+		db.Post.update(
+			{ published: true },
+			{ where: { id: req.params.id } }
+		).then(function(result) {
+			res.status(200).send();
+		});
+	});
+	app.put("/api/shortable/unpublish/:id", function(req, res){
+		db.Post.update(
+			{ published: false },
+			{ where: { id: req.params.id } }
+		).then(function(result) {
+			res.status(200).send();
+		});
 	});
 	// voting
 	app.put("/api/shortable/vote/:id", function(req, res){
