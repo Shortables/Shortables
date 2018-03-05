@@ -1,5 +1,8 @@
 const db = require("../models");
 
+const USER_ATTR = ['username','firstname','lastname','picture'];
+const POST_ATTR = ['id','title','content','rating', 'createdAt', 'cover', 'published'];
+
 function map_posts( post_arr, user_posts_arr ){
 	let posts = post_arr;
 	let post_map = {};
@@ -12,49 +15,63 @@ function map_posts( post_arr, user_posts_arr ){
 	}
 	for(let i=0; i < posts.length; i++){
 		let post_id = posts[i].id;
+		let post_obj = posts[i].toJSON();
 		if(post_map[post_id]){
-			let post_obj = posts[i].toJSON();
 			post_obj.fav = post_map[post_id][0];
 			post_obj.rated = post_map[post_id][1];
-			posts[i] = post_obj;
+			post_obj.rated_val = (post_map[post_id][1]===1)? 1 :0;
 		}
+		else{
+			post_obj.fav = false;
+			post_obj.rated = 0;
+		}
+		posts[i] = post_obj;
 	}
 	return posts;
 }
 
 module.exports = function(app) {
 
-	app.get("/api/shortables/all", function(req, res) {
-		const user_attr = ['username','firstname','lastname','picture'];
+	app.get("/shortables/all", function(req, res) {
 		db.Post.findAll({
-			attributes: ['id','title','content','rating','voted'],
+			attributes: POST_ATTR,
 			where: { published: true },
 			limit: 100,
 			order: [['createdAt', 'DESC']],
-			include: [{ model: db.User, attributes: user_attr}]
+			include: [{ model: db.User, attributes: USER_ATTR}]
 
 		}).then(function(shortables) {
-			if(req.user && shortables.length ){
-				console.log("\n+++\n");
-			//include UserPost if authorised for voting and subscribing buttons
+			if( !req.user){
+				res.render('shortables', { shortables: shortables });
+			}
+			else if( !shortables || !shortables.length){
+				res.render('shortables', { user: req.user });
+			}
+			else{
+				//include UserPost if authorised for voting and subscribing buttons
 				db.UserPost.findAll({
 					attributes: ['favorites', 'rated', 'PostId'],
 					where: { UserId: req.user.id }
 				}).then(function(user_posts){
 					if(user_posts.length){				
-						map_posts( shortables, user_posts );
-						res.json(shortables);
+						let posts = map_posts( shortables, user_posts );
+						res.render('shortables',{ 
+							user : req.user,
+							shortables: posts
+						});
+					}
+					else{
+						res.render('shortables',{ 
+							user : req.user,
+							shortables: shortables
+						});						
 					}
 				});
 			}
-			else{
-				res.json(shortables);
-			}
-
 		});
 	});
 
-	app.get("/api/shortables/popular/:time?", function(req, res) {
+	app.get("/shortables/popular/:time?", function(req, res) {
 
 		let query = { published: true };
 		let period = req.params.time;
@@ -70,30 +87,42 @@ module.exports = function(app) {
 				[db.Sequelize.Op.gte]: startDate
 			};
 		}
-		const post_attr = ['id','title','content','rating','voted'];
-		const user_attr = ['id','username','firstname','lastname','picture'];
 		db.Post.findAll({
-			attributes: post_attr,
+			attributes: POST_ATTR,
 			where: query,
 			limit: 100,
 			order: [['rating','DESC'],['createdAt', 'DESC']],
-			include: [{model: db.User, attributes: user_attr}]
+			include: [{model: db.User, attributes: USER_ATTR}]
 
 		}).then(function(shortables) {
-			if(req.user && shortables.length ){
+			if( !req.user){
+				res.render('shortables', { shortables: shortables });
+			}
+			else if( !shortables || !shortables.length){
+				res.render('shortables', {user: req.user});
+			}
+			else{
+			// if(req.user && shortables.length ){
 			//include UserPost if authorised (for voting and subscribing buttons)
 				db.UserPost.findAll({
 					attributes: ['favorites', 'rated', 'PostId'],
 					where: { UserId: req.user.id }
 				}).then(function(user_posts){
 					if(user_posts.length){				
-						map_posts( shortables, user_posts );
-						res.json(shortables);
+						let posts = map_posts( shortables, user_posts );
+						// res.json(shortables);
+						res.render('shortables',{ 
+							user : req.user,
+							shortables: posts
+						});
+					}
+					else{
+						res.render('shortables',{ 
+							user : req.user,
+							shortables: shortables
+						});						
 					}
 				});
-			}
-			else{
-				res.json(shortables);
 			}
 		});
 	});
@@ -103,50 +132,65 @@ module.exports = function(app) {
 			UserId : req.params.userId,
 			published : true
 		};
-		const post_attr = ['id','title','content','rating'];
-		const user_attr = ['username','firstname','lastname','picture'];
 		db.Post.findAll({
-			attributes: post_attr,
+			attributes: POST_ATTR,
 			where: condition,
 			order: [['updatedAt', 'DESC']],
-			include: [{ model: db.User, attributes: user_attr}]
+			include: [{ model: db.User, attributes: USER_ATTR}]
 
 		}).then(function(shortables) {
-			if(req.user && shortables.length ){
+			if( !req.user){
+				res.render('shortables', { shortables: shortables });
+			}
+			else if( !shortables || !shortables.length){
+				res.render('shortables', {user: req.user});
+			}
+			else{
+			// if(req.user && shortables.length ){
 			//include UserPost if authorised for voting and subscribing buttons
 				db.UserPost.findAll({
 					attributes: ['favorites', 'rated', 'PostId'],
 					where: { UserId: req.user.id }
 				}).then(function(user_posts){
 					if(user_posts.length){				
-						map_posts( shortables, user_posts );
-						res.json(shortables);
+						let posts = map_posts( shortables, user_posts );
+						// res.json(shortables);
+						res.render('shortables',{ 
+							user : req.user,
+							shortables: posts
+						});
+					}
+					else{
+						res.render('shortables',{ 
+							user : req.user,
+							shortables: shortables
+						});						
 					}
 				});
-			}
-			else{
-				res.json(shortables);
 			}
 		});
 
 	});
 
-	app.get("/api/shortables/owner", function(req, res){
+	app.get("/shortables/owner", function(req, res){
 		let condition = {};
 		if(req.user){
 			let condition = {
 				UserId : req.user.id
 			};
-			const post_attr = ['id','title','content','rating', 'voted','published'];
-			const user_attr = ['username','firstname','lastname','picture'];
 			db.Post.findAll({
-				attributes: post_attr,
+				attributes: POST_ATTR,
 				where: condition,
 				order: [['createdAt', 'DESC']],
-				include: [{ model: db.User, attributes: user_attr}]
+				include: [{ model: db.User, attributes: USER_ATTR}]
 
 			}).then(function(shortables) {
-				res.json(shortables);
+				let author = req.user;
+				author.owner = true;
+				res.render('shortables',{
+					user : req.user,
+					shortables: shortables
+				});
 			});
 		}
 		else{
@@ -154,11 +198,10 @@ module.exports = function(app) {
 		}
 	});
 
-	app.get("/api/shortables/favorites", function(req, res){
+	app.get("/shortables/favorites", function(req, res){
 		if(req.user){
-			// const user_attr = ['username','firstname','lastname','picture'];
 			db.UserPost.findAll({
-				attributes: ['id','rated', 'PostId'],
+				attributes: ['id','rated', 'favorites', 'PostId'],
 				where: { 
 					favorites : true,
 					UserId : req.user.id
@@ -166,53 +209,54 @@ module.exports = function(app) {
 				order: [['createdAt', 'DESC']]
 
 			}).then(function(user_posts) {
-				if(user_posts.length ){
+				if( !user_posts || !user_posts.length){
+					res.render('shortables', { user: req.user });
+				}
+				else{
+				// if(user_posts.length ){
 					let ids_array = [];
 					for(let i=0; i<user_posts.length; i++){
 						ids_array.push(user_posts[i].PostId);
 					}
-					const user_attr = ['username','firstname','lastname','picture'];
 					db.Post.findAll({
-						attributes: ['id','title','content','rating'],
+						attributes: POST_ATTR,
 						where: { id : ids_array },
-						order: [['updatedAt', 'DESC']],
-						include: [{ model: db.User, attributes: user_attr}]
+						order: [['createdAt', 'DESC']],
+						include: [{ model: db.User, attributes: USER_ATTR}]
 					
 					}).then(function(shortables) {
-						if(shortables.length){				
-							map_posts( shortables, user_posts );
-							res.json(shortables);
+						if(shortables && shortables.length){				
+							let posts = map_posts( shortables, user_posts );
+							res.render('shortables',{ 
+								user : req.user,
+								shortables: posts
+							});
 						}
 					});
 				}
-				else{
-					res.json(user_posts);
-				}
-
 			});
 		}
 		else{
-			res.status(401).send();
+			res.render('shortables',{ msg : "not authorized" });
+			// res.status(401).send();
 		}
 	});
 
 	//get a single shortable
 	app.get("/api/shortable/:id", function(req, res) {
 		
-		const post_attr = ['id','title','content','rating', 'voted','published'];
-		const user_attr = ['username','firstname','lastname','picture'];
 		db.Post.findOne({
-			attributes: post_attr,
+			attributes: POST_ATTR,
 			where: { id: req.params.id },
-			include: [{ model: db.User, attributes: user_attr}]
+			include: [{ model: db.User, attributes: USER_ATTR}]
 
 		}).then(function(shortable) {
-			if( shortable.published === true || 
-			(req.user && req.user.id === shortable.UserId)){
+			if( shortable && (shortable.published === true || 
+			(req.user && req.user.id === shortable.UserId))){
 				res.json(shortable);
 			}
 			else {
-				res.status(401).send({});
+				res.status(404).send({});
 			}
 		});
 	});
@@ -235,9 +279,10 @@ module.exports = function(app) {
 		//required fields: title, content, UserId
 		if(req.user){
 			let post = req.body;
+			// console.log(req.body);
 			post.UserId = req.user.id;
-			db.Post.create(post).then(function(shortable) {
-				res.json(shortable);
+			db.Post.create(post).then(function(result) {
+				res.json({ id: result.insertId });
 			});
 		}
 		else {
@@ -257,64 +302,86 @@ module.exports = function(app) {
 			res.json(shortable);
 		});
 	});
-	
+	app.put("/api/shortable/publish/:id", function(req, res){
+		//publish toggle
+	});
 	// voting
 	app.put("/api/shortable/vote/:id", function(req, res){
 		//vote for post (id)
-		db.UserPost.findOne({
-			attributes: ['id', 'favorites', 'rated'],
-			where: { 
-				PostId: req.params.id, 
-				UserId: req.user.id 
-			}
-		}).then(function(user_posts){
-			if( user_posts.length ){
-				//some record for user-post was found, so update it
-				let user_post_id = user_posts[0].id;
+		let rating_str = 'rating';
+		let rating_val = 0;
+		if(req.body.vote === 'up'){
+			rating_str += ' +1';
+			rating_val = 1;
+		}
+		else if (req.body.vote === 'down'){
+			rating_str += ' -1';
+			rating_val = 2;
+		}
+		else rating_str += ' +0';
 
-				db.UserPost.update(
-					{ rated: 1 },
-					{ where: { id: user_post_id } }
-				).then(function(shortable) {
-					res.json(shortable);
-				});
-			}
-			else{
-				//no record found, so add new record
-				let user_post = {
-					UserId : req.user.id,
-					PostId : req.params.id,
-					voted  : 1,
-					favorites : false
-				};
-				db.UserPost.create(
-					user_post,
-				).then(function(shortable) {
-					res.json(shortable);
-				});
-			}
+		db.Post.update({ 
+			rating: db.sequelize.literal(rating_str),
+			voted: db.sequelize.literal('voted +1')
+		},
+		{   where: { id: req.params.id } }
+
+		).then(function(shortable) {
+
+			db.UserPost.findOne({
+				attributes: ['id', 'favorites', 'rated'],
+				where: { 
+					PostId: req.params.id, 
+					UserId: req.user.id 
+				}
+			}).then(function(up_result){
+				if( up_result !==null ) {
+					//some record for user-post was found, so update it
+					let user_post_id = up_result.id;
+					//rated 1 is for add, 2 for down
+					db.UserPost.update(
+						{ rated: rating_val },
+						{ where: { id: user_post_id } }
+					).then(function(result) {
+						res.status(200).send();
+					});
+				}
+				else{
+					//no record found, so add new record
+					let user_post = {
+						UserId : req.user.id,
+						PostId : req.params.id,
+						rated  : rating_val,
+						favorites : false
+					};
+					db.UserPost.create(
+						user_post,
+					).then(function(shortable) {
+						res.status(200).send();
+					});
+				}
+			});
 		});
 	});
 
 	//adding to (or deleting from) fav list
-	app.put("/api/shortable/favorites/:action", function(req, res){
+	app.put("/api/shortable/favorites/:id", function(req, res){
 		//action: add or delete
+		let new_val = (req.body.action === 'add')? true : false;
 		db.UserPost.findOne({
 			attributes: ['id', 'favorites', 'rated'],
 			where: { 
 				PostId: req.params.id, 
 				UserId: req.user.id 
 			}
-		}).then(function(user_posts){
-			if( user_posts.length ){
+		}).then(function(up_result){
+			if( up_result !== null ){
 				//some record for user-post was found, so update it
-				let user_post_id = user_posts[0].id;
-				let new_val = (req.params.action === 'add')? true : false;
 				db.UserPost.update(
 					{ favorites: new_val },
-					{ where: { id: user_post_id } }
-				).then(function(shortable) {
-					res.json(shortable);
+					{ where: { id: up_result.id } }
+				).then(function(result) {
+					res.status(200).send();
 				});
 			}
 			else{
@@ -322,13 +389,13 @@ module.exports = function(app) {
 				let user_post = {
 					UserId : req.user.id,
 					PostId : req.params.id,
-					voted  : 1,
-					favorites : false
+					voted  : 0,
+					favorites : new_val
 				};
 				db.UserPost.create(
 					user_post,
-				).then(function(shortable) {
-					res.json(shortable);
+				).then(function(result) {
+					res.status(200).send();
 				});
 			}
 		});
@@ -336,6 +403,5 @@ module.exports = function(app) {
 
 	app.get("*", function(req, res) {
 		res.redirect('/shortables/all');
-		// res.sendFile(path.join(__dirname, "../public/home.html"));
 	});
 };
