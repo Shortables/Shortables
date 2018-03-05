@@ -2,7 +2,9 @@ $(function() {
 // $(document).ready(function() {
   
   $("#new_post_submit").on("click", addShortable);
+  $("#shortables-list").on("click", ".vote", vote);
 
+// <button class="vote_up" data-id="{{post.id}}">Up</button>
   function addShortable(ev){
     ev.preventDefault();
     var shortable = {
@@ -26,7 +28,21 @@ $(function() {
   function deleteFromfavorites(){
     return 0;
   }
-  function voteForShortable(vote){
-
+  function togglePublish(){
+    return 0;
   }
+  function vote(){
+    var post_id = $(this).data("id");
+    var user_vote = $(this).data("vote");
+
+    $.ajax("/api/shortable/vote/" + post_id, {
+      type: "PUT",
+      data: { vote: user_vote }
+    }).then(
+      function() {
+        location.reload();
+      }
+    );
+  }
+
 });

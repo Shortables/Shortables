@@ -20,10 +20,10 @@ function map_posts( post_arr, user_posts_arr ){
 			post_obj.fav = post_map[post_id][0];
 			post_obj.rated = post_map[post_id][1];
 		}
-		// else{
-		// 	post_obj.fav = false;
-		// 	post_obj.rated = 0;
-		// }
+		else{
+			post_obj.fav = false;
+			post_obj.rated = 0;
+		}
 		posts[i] = post_obj;
 	}
 	return posts;
@@ -174,7 +174,6 @@ module.exports = function(app) {
 	app.get("/shortables/owner", function(req, res){
 		let condition = {};
 		if(req.user){
-		console.log('===getting owner shortables:'+req.user.uername );
 			let condition = {
 				UserId : req.user.id
 			};
@@ -210,7 +209,7 @@ module.exports = function(app) {
 
 			}).then(function(user_posts) {
 				if( !user_posts || !user_posts.length){
-					res.render('shortables', {user: req.user});
+					res.render('shortables', { user: req.user });
 				}
 				else{
 				// if(user_posts.length ){
@@ -237,19 +236,18 @@ module.exports = function(app) {
 			});
 		}
 		else{
-			res.status(401).send();
+			res.render('shortables',{ msg : "not authorized" });
+			// res.status(401).send();
 		}
 	});
 
 	//get a single shortable
 	app.get("/api/shortable/:id", function(req, res) {
 		
-		const post_attr = ['id','title','content','rating', 'voted','published'];
-		const user_attr = ['username','firstname','lastname','picture'];
 		db.Post.findOne({
-			attributes: post_attr,
+			attributes: POST_ATTR,
 			where: { id: req.params.id },
-			include: [{ model: db.User, attributes: user_attr}]
+			include: [{ model: db.User, attributes: USER_ATTR}]
 
 		}).then(function(shortable) {
 			if( shortable && (shortable.published === true || 
@@ -257,7 +255,7 @@ module.exports = function(app) {
 				res.json(shortable);
 			}
 			else {
-				res.status(401).send({});
+				res.status(404).send({});
 			}
 		});
 	});
@@ -308,52 +306,58 @@ module.exports = function(app) {
 	app.put("/api/shortable/vote/:id", function(req, res){
 		//vote for post (id)
 		let rating_str = 'rating';
-		if(req.body.vote === 'up') rating_str += ' +1';
-		else if (req.body.vote === 'down') rating_str += ' -1';
+		let rating_val = 0;
+		if(req.body.vote === 'up'){
+			rating_str += ' +1';
+			rating_val = 1;
+		}
+		else if (req.body.vote === 'down'){
+			rating_str += ' -1';
+			rating_val = 2;
+		}
 		else rating_str += ' +0';
 
 		db.Post.update({ 
-			rating: sequelize.literal(rating_str),
-			voted: sequelize.literal('voted +1')
+			rating: db.sequelize.literal(rating_str),
+			voted: db.sequelize.literal('voted +1')
 		},
 		{   where: { id: req.params.id } }
 
 		).then(function(shortable) {
-			res.json(shortable);
-		});
 
-		db.UserPost.findOne({
-			attributes: ['id', 'favorites', 'rated'],
-			where: { 
-				PostId: req.params.id, 
-				UserId: req.user.id 
-			}
-		}).then(function(user_posts){
-			if( user_posts.length ){
-				//some record for user-post was found, so update it
-				let user_post_id = user_posts[0].id;
-
-				db.UserPost.update(
-					{ rated: 1 },
-					{ where: { id: user_post_id } }
-				).then(function(shortable) {
-					res.json(shortable);
-				});
-			}
-			else{
-				//no record found, so add new record
-				let user_post = {
-					UserId : req.user.id,
-					PostId : req.params.id,
-					voted  : 1,
-					favorites : false
-				};
-				db.UserPost.create(
-					user_post,
-				).then(function(shortable) {
-					res.json(shortable);
-				});
-			}
+			db.UserPost.findOne({
+				attributes: ['id', 'favorites', 'rated'],
+				where: { 
+					PostId: req.params.id, 
+					UserId: req.user.id 
+				}
+			}).then(function(user_posts){
+				if( user_posts && user_posts.length ){
+					//some record for user-post was found, so update it
+					let user_post_id = user_posts[0].id;
+					//rated 1 is for add, 2 for down
+					db.UserPost.update(
+						{ rated: rating_val },
+						{ where: { id: user_post_id } }
+					).then(function(result) {
+						res.status(200).send();
+					});
+				}
+				else{
+					//no record found, so add new record
+					let user_post = {
+						UserId : req.user.id,
+						PostId : req.params.id,
+						rated  : 1,
+						favorites : false
+					};
+					db.UserPost.create(
+						user_post,
+					).then(function(shortable) {
+						res.status(200).send();
+					});
+				}
+			});
 		});
 	});
 
@@ -383,7 +387,7 @@ module.exports = function(app) {
 				let user_post = {
 					UserId : req.user.id,
 					PostId : req.params.id,
-					voted  : 1,
+					voted  : 0,
 					favorites : false
 				};
 				db.UserPost.create(
