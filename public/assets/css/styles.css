@@ -1,5 +1,12 @@
+html {
+    height: 100%;
+}
+
 body {
     padding-top: 75px;
+    background: linear-gradient(to bottom, #104E83, skyblue);
+    background-repeat: no-repeat;
+    height: 100%;
 }
 
 footer {
@@ -11,6 +18,11 @@ footer {
 nav, footer {
     background-color: #104E83;
     color: white;
+    box-shadow: 5px 5px 15px #104E83;
+}
+
+.top-menu {
+    text-align: center;
 }
 
 .navbar-brand {
@@ -20,7 +32,8 @@ nav, footer {
 
 .box {
     width: 40%;
-    border: 2px solid grey;
+    background-color: aliceblue;
+    border: 1px solid grey;
     padding: 30px;
     padding-bottom: 45px;
 }
