@@ -14,13 +14,18 @@ $(function() {
 // <button class="vote_up" data-id="{{post.id}}">Up</button>
   function addShortable(ev){
     ev.preventDefault();
+    let new_title = $("#title_input").val().trim();
+    let new_content = $("#content_input").val().trim();
+    if(!new_title || !new_content){
+      alert("Title and Content can not be empty!");
+      return;
+    }
     let shortable = {
-      title: $("#title_input").val().trim(),
-      content: $("#content_input").val().trim(),
+      title: new_title,
+      content: new_content,
       published: $('#publish').is(":checked")
     };
-    console.log("trying to create new post:"+JSON.stringify(shortable));
-    //!!!validate input
+    // console.log("trying to create new post:"+JSON.stringify(shortable));
     $.ajax("/api/shortable/add", {
       type: "POST",
       data: shortable
