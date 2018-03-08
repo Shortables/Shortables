@@ -6,6 +6,8 @@ $(function() {
   $("#shortables-list").on("click", ".fav_toggle", toggleFavorites);
   $("#shortables-list").on("click", ".publish_toggle", togglePublished);
 
+  $(".short-title").on("click", show_shortable);
+
 // <button class="vote_up" data-id="{{post.id}}">Up</button>
   function addShortable(ev){
     ev.preventDefault();
@@ -66,6 +68,21 @@ $(function() {
     }).then(function() {
       location.reload();
     });
+  }
+
+  function show_shortable(){
+    let post_id = $(this).data("id");
+    console.log(post_id);
+    $("#short_title").empty();
+    $("#short_content").empty();
+    $.get("/api/shortable/"+post_id, function(data){
+      console.log(data);
+      if(data){
+        $("#short_title").text(data.title);
+        $("#short_content").text(data.content);
+        $("#shortable-modal").modal("toggle");
+      }
+    }); 
   }
 
 });

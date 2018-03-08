@@ -37,7 +37,7 @@ module.exports = function(app) {
 			attributes: POST_ATTR,
 			where: { published: true },
 			limit: 100,
-			order: [['updatedAt', 'DESC']],
+			order: [['createdAt', 'DESC']],
 			include: [{ model: db.User, attributes: USER_ATTR}]
 
 		}).then(function(shortables) {
