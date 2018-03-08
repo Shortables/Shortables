@@ -1,12 +1,13 @@
 html {
     height: 110%;
+    background: linear-gradient(to bottom, #104E83, skyblue);
 }
 
 body {
     padding-top: 75px;
     background: linear-gradient(to bottom, #104E83, skyblue);
     background-repeat: no-repeat;
-    height: 110%;
+    bottom: 110%;
 }
 
 footer {
@@ -58,4 +59,8 @@ h1, h2, h3 {
     color: ;
     font-family: ;
     font-size: ;
+}
+
+a {
+    color: white;
 }
