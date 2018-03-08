@@ -1,16 +1,16 @@
-{{#unless shortables }}
+{{#if shortables}}
+    <div id="shortables-list" class="post-list">
+        {{#each shortables}}
+            {{#if ../user}}
+                {{> posts/shortable post=this user=../user}}
+            {{else}}
+                {{> posts/shortable post=this}}
+            {{/if}}
+      {{/each}}
+    </div>
+{{else}}
     <h1>Sorry, nothing found by your request...</h1>
-{{/unless}}
-
-<div id="shortables-list" class="post-list">
-	{{#each shortables}}
-		{{#if ../user}}
-			{{> posts/shortable post=this user=../user}}
-		{{else}}
-			{{> posts/shortable post=this}}
-		{{/if}}
-  {{/each}}
-</div>
+{{/if}}
 
 <div id="shortable-modal" class="modal fade modal-lg" role="dialog">
 	<div class="modal-dialog modal-lg">
@@ -33,4 +33,3 @@
      	</div>
 	</div>
 </div>
-

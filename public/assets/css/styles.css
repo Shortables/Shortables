@@ -1,12 +1,12 @@
 html {
-    height: 100%;
+    height: 110%;
 }
 
 body {
     padding-top: 75px;
     background: linear-gradient(to bottom, #104E83, skyblue);
     background-repeat: no-repeat;
-    height: 100%;
+    height: 110%;
 }
 
 footer {
@@ -28,6 +28,11 @@ nav, footer {
 .navbar-brand {
     font-family: 'Courgette', cursive;
     font-size: 22px;
+}
+
+.card {
+    width: 75%;
+    margin: auto;
 }
 
 .box {

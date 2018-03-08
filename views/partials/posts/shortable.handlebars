@@ -1,36 +1,48 @@
-<div class="short-item">
-	<h3 class="short-title" data-id="{{post.id}}">{{post.title}}</h3>
-{{!-- 	<div class="short-text">
-		<p>{{post.content}}</p>
-	</div> --}}
-	<span>Rating: {{post.rating}}</span><br/>
-	<span>Author: {{User.username}}</span><br/>
-	<span>Created: {{post.createdAt}}</span><br/>
- 	{{#if user}}
-		<button class="fav_toggle" data-id="{{post.id}}" data-fav="{{post.fav}}">
-	 	{{#if post.fav}}Delete from favorites{{else}}Add to favorites!{{/if}}
-		</button>
-		{{#if post.rated}}
-			<p> You rated this post: 
-			{{#if post.rated_val}}Up{{else}}Down{{/if}}</p>
-		{{else}}
-			<button class="vote up" data-id="{{post.id}}" data-vote="up">Up</button>
-			<button class="vote down" data-id="{{post.id}}" data-vote="down">Down</button>
+
+<div id="short-"{{post.id}} class="short-item">
+    
+    <div class="card">
+      <h2 class="card-header short-title" data-id="{{post.id}}">{{post.title}}</h2>
+      <div class="card-body">
+        <h5 class="card-title">{{post.createdAt}}</h5>
+          <p class="card-text">
+            <span>Rating: {{post.rating}}</span><br/>
+            <span>Author: {{User.username}}</span><br/>
+          </p>
+       {{!--  <p class="card-text">{{post.content}}</p> --}}
+
+        {{#if user}}
+
+			<button class="fav_toggle" data-id="{{post.id}}" data-fav="{{post.fav}}">
+		 	{{#if post.fav}}Delete from favorites{{else}}Add to favorites!{{/if}}
+			</button>
+			{{#if post.rated}}
+				<p> You rated this post: 
+				{{#if post.rated_val}}Up{{else}}Down{{/if}}</p>
+			{{else}}
+				<button class="vote up" data-id="{{post.id}}" data-vote="up">Up</button>
+				<button class="vote down" data-id="{{post.id}}" data-vote="down">Down</button>
+
+			{{/if}}    
+
 		{{/if}}
 
-	{{/if}}
-	{{#if user.owner}}
-		{{#if post.published}}
-			<p class="published_post">Published &nbsp;</p>
-			<button class="publish_toggle" data-id="{{post.id}}" data-pub="{{post.published}}">
-				Unpublish
-			</button>
-		{{else}}
-			<p class="unpublished_post">Unpublished &nbsp;</p>
-			<button class="publish_toggle" data-id="{{post.id}}" data-pub="{{post.published}}">
-				Publish
-			</button>
+		{{#if user.owner}}
+			{{#if post.published}}
+				<p class="published_post">Published &nbsp;</p>
+				<button class="publish_toggle" data-id="{{post.id}}" data-pub="{{post.published}}">
+					Unpublish
+				</button>
+			{{else}}
+				<p class="unpublished_post">Unpublished &nbsp;</p>
+				<button class="publish_toggle" data-id="{{post.id}}" data-pub="{{post.published}}">
+					Publish
+				</button>
+			{{/if}}
 		{{/if}}
-	{{/if}}
+
+	  </div>
+    </div>
+
 </div>
 <hr/>
