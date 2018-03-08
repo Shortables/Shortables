@@ -1,12 +1,20 @@
 html {
-    height: 110%;
 }
 
 body {
     padding-top: 75px;
-    background: linear-gradient(to bottom, #104E83, skyblue);
-    background-repeat: no-repeat;
-    height: 110%;
+    height: 100%;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+    background: #70bg32;
+    background-repeat:no-repeat;
+    background: -webkit-linear-gradient( to bottom, #104E83, skyblue);
+    background: -moz-linear-gradient( to bottom, #104E83, skyblue);
+    background: -ms-linear-gradient( to bottom, #104E83, skyblue);
+    background: -o-linear-gradient( to bottom, #104E83, skyblue);
+    background: linear-gradient( to bottom, #104E83, skyblue);
 }
 
 footer {
