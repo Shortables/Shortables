@@ -1,19 +1,15 @@
 <div id="short-"{{post.id}}>
     
     <div class="card">
-      <p class="card-header">{{post.createdAt}}</p>
+      <h2 class="card-header">{{post.title}}</h2>
       <div class="card-body">
-        <h5 class="card-title">{{post.title}}</h5>
+        <h5 class="card-title">{{post.createdAt}}</h5>
           <p class="card-text">
             <span>Rating: {{post.rating}}</span><br/>
             <span>Author: {{User.username}}</span><br/>
           </p>
         <p class="card-text">{{post.content}}</p>
-        <a href="#" class="btn btn-primary">Go somewhere</a>
-      </div>
-    </div>
-    
- 	{{#if user}}
+        <a href="#" class="">{{#if user}}
 		<button class="fav_toggle" data-id="{{post.id}}" data-fav="{{post.fav}}">
 	 	{{#if post.fav}}Delete from favorites{{else}}Add to favorites!{{/if}}
 		</button>
@@ -23,7 +19,10 @@
 		{{else}}
 			<button class="vote up" data-id="{{post.id}}" data-vote="up">Up</button>
 			<button class="vote down" data-id="{{post.id}}" data-vote="down">Down</button>
-		{{/if}}
+		{{/if}}</a>
+      </div>
+    </div>
+    
 
 	{{/if}}
 	{{#if user.owner}}
