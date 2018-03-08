@@ -30,6 +30,11 @@ nav, footer {
     font-size: 22px;
 }
 
+.card {
+    width: 75%;
+    margin: auto;
+}
+
 .box {
     width: 40%;
     background-color: aliceblue;

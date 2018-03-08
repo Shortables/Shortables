@@ -1,11 +1,18 @@
 <div id="short-"{{post.id}}>
-	<h3>{{post.title}}</h3>
-	<div class="short-text">
-		<p>{{post.content}}</p>
-	</div>
-	<span>Rating: {{post.rating}}</span><br/>
-	<span>Author: {{User.username}}</span><br/>
-	<span>Created: {{post.createdAt}}</span><br/>
+    
+    <div class="card">
+      <p class="card-header">{{post.createdAt}}</p>
+      <div class="card-body">
+        <h5 class="card-title">{{post.title}}</h5>
+          <p class="card-text">
+            <span>Rating: {{post.rating}}</span><br/>
+            <span>Author: {{User.username}}</span><br/>
+          </p>
+        <p class="card-text">{{post.content}}</p>
+        <a href="#" class="btn btn-primary">Go somewhere</a>
+      </div>
+    </div>
+    
  	{{#if user}}
 		<button class="fav_toggle" data-id="{{post.id}}" data-fav="{{post.fav}}">
 	 	{{#if post.fav}}Delete from favorites{{else}}Add to favorites!{{/if}}
