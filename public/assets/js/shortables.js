@@ -75,11 +75,9 @@ $(function() {
 
   function show_shortable(){
     let post_id = $(this).data("id");
-    console.log(post_id);
     $("#short_title").empty();
     $("#short_content").empty();
     $.get("/api/shortable/"+post_id, function(data){
-      console.log(data);
       if(data){
         $("#short_title").text(data.title);
         $("#short_content").text(data.content);
