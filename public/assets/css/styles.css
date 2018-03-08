@@ -1,20 +1,28 @@
 html {
+    /*height: 110%;*/
+    /*background: linear-gradient(to bottom, #104E83, skyblue);*/
 }
 
 body {
     padding-top: 75px;
     height: 100%;
+    min-height: 100vh;
     -webkit-background-size: cover;
     -moz-background-size: cover;
     -o-background-size: cover;
     background-size: cover;
-    background: #70bg32;
-    background-repeat:no-repeat;
+    background: skyblue;
+    background-repeat: no-repeat;
     background: -webkit-linear-gradient( to bottom, #104E83, skyblue);
     background: -moz-linear-gradient( to bottom, #104E83, skyblue);
     background: -ms-linear-gradient( to bottom, #104E83, skyblue);
     background: -o-linear-gradient( to bottom, #104E83, skyblue);
     background: linear-gradient( to bottom, #104E83, skyblue);
+/*
+    background: linear-gradient(to bottom, #104E83, skyblue);
+    background-repeat: no-repeat;
+    bottom: 110%;
+*/
 }
 
 footer {
@@ -66,4 +74,12 @@ h1, h2, h3 {
     color: ;
     font-family: ;
     font-size: ;
+}
+
+a {
+    color: white;
+}
+a:hover {
+    color: skyblue;
+    text-decoration: underline;
 }

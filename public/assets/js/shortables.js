@@ -1,6 +1,9 @@
 $(function() {
 // $(document).ready(function() {
   
+  $('li.active').removeClass('active');
+  $('a[href="' + location.pathname + '"]').closest('li').addClass('active'); 
+
   $("#new_post_submit").on("click", addShortable);
   $("#shortables-list").on("click", ".vote", vote);
   $("#shortables-list").on("click", ".fav_toggle", toggleFavorites);
@@ -84,9 +87,4 @@ $(function() {
       }
     }); 
   }
-  
-  // $(".nav a").on("click", function(){
-  //    $(".nav").find(".active").removeClass("active");
-  //    $(this).parent().addClass("active");
-  // });
 });

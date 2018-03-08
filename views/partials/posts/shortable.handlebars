@@ -14,14 +14,14 @@
         {{#if user}}
 
 			<button class="fav_toggle" data-id="{{post.id}}" data-fav="{{post.fav}}">
-		 	{{#if post.fav}}Delete from favorites{{else}}Add to favorites!{{/if}}
+		 	{{#if post.fav}}<i class="fas fa-heart"></i>{{else}}<i class="far fa-heart"></i>{{/if}}
 			</button>
 			{{#if post.rated}}
 				<p> You rated this post: 
 				{{#if post.rated_val}}Up{{else}}Down{{/if}}</p>
 			{{else}}
-				<button class="vote up" data-id="{{post.id}}" data-vote="up">Up</button>
-				<button class="vote down" data-id="{{post.id}}" data-vote="down">Down</button>
+				<button class="vote up" data-id="{{post.id}}" data-vote="up"><i class="fas fa-thumbs-up"></i></button>
+				<button class="vote down" data-id="{{post.id}}" data-vote="down"><i class="fas fa-thumbs-down"></i></button>
 
 			{{/if}}    
 
