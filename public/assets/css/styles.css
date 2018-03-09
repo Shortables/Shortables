@@ -95,3 +95,14 @@ a:hover {
   margin: 0 auto; 
 }
 
+#title_input {
+    width: 350px;
+}
+
+#new_post_message {
+    font-weight: bold;
+    color: red;
+}
+ .card-header {
+    color: #1178b2;
+ }

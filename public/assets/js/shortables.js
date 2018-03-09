@@ -11,15 +11,19 @@ $(function() {
 
   $(".short-title").on("click", show_shortable);
 
+  $("#new_post_message").empty();
+
 // <button class="vote_up" data-id="{{post.id}}">Up</button>
   function addShortable(ev){
     ev.preventDefault();
     let new_title = $("#title_input").val().trim();
     let new_content = $("#content_input").val().trim();
     if(!new_title || !new_content){
-      alert("Title and Content can not be empty!");
+      $("#new_post_message").text("Title and Content can not be empty!");
+      //alert("Title and Content can not be empty!");
       return;
     }
+    $("#new_post_message").empty();
     let shortable = {
       title: new_title,
       content: new_content,
