@@ -14,17 +14,31 @@
         {{#if user}}
 
 			<button class="fav_toggle" data-id="{{post.id}}" data-fav="{{post.fav}}">
-		 	{{#if post.fav}}<i class="fas fa-heart"></i>{{else}}<i class="far fa-heart"></i>{{/if}}
+		 	{{#if post.fav}}
+                <div style="color:#E91E63">
+                    <i class="fas fa-heart"></i></div>
+            {{else}}
+                <div style="color:#E91E63">
+                    <i class="far fa-heart"></i></div>
+                {{/if}}
 			</button>
+          
 			{{#if post.rated}}
-				<p> You rated this post: 
-				{{#if post.rated_val}}Up{{else}}Down{{/if}}</p>
+				{{#if post.rated_val}}
+                    <div style="color:#43A047">
+                    <i class="fas fa-thumbs-up"></i></div>
+                {{else}}<div style="color:#E53935">
+                        <i class="fas fa-thumbs-down"></i></div>{{/if}}
 			{{else}}
-				<button class="vote up" data-id="{{post.id}}" data-vote="up"><i class="fas fa-thumbs-up"></i></button>
-				<button class="vote down" data-id="{{post.id}}" data-vote="down"><i class="fas fa-thumbs-down"></i></button>
-
+				<button class="vote up" data-id="{{post.id}}" data-vote="up">
+                    <div style="color:#43A047">
+                        <i class="fas fa-thumbs-up"></i></div>
+                </button>
+				<button class="vote down" data-id="{{post.id}}" data-vote="down">
+                    <div style="color:#E53935">
+                        <i class="fas fa-thumbs-down"></i></div>
+                    </button>
 			{{/if}}    
-
 		{{/if}}
 
 		{{#if user.owner}}
