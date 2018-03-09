@@ -15,28 +15,29 @@
 
 			<button class="fav_toggle" data-id="{{post.id}}" data-fav="{{post.fav}}">
 		 	{{#if post.fav}}
-                <div style="color:#E91E63">
-                    <i class="fas fa-heart"></i></div>
+                    <i class="fas fa-heart pink"></i>
             {{else}}
-                <div style="color:#E91E63">
-                    <i class="far fa-heart"></i></div>
+                    <i class="far fa-heart pink"></i>
                 {{/if}}
 			</button>
           
 			{{#if post.rated}}
 				{{#if post.rated_val}}
-                    <div style="color:#43A047">
-                    <i class="fas fa-thumbs-up"></i></div>
-                {{else}}<div style="color:#E53935">
-                        <i class="fas fa-thumbs-down"></i></div>{{/if}}
+                    <i class="fas fa-thumbs-up green"></i>
+                {{else}}
+                        <i class="fas fa-thumbs-down red"></i>{{/if}}
+				<p> You rated this post: 
+				{{#if post.rated_val}}<i class="fas fa-thumbs-up green"></i>
+				{{else}}<i class="fas fa-thumbs-down red"></i>
+				{{/if}}
+				</p>
+>>>>>>> efc5c5d07381842541cc8c5a6906e4b86d0d6f6d
 			{{else}}
 				<button class="vote up" data-id="{{post.id}}" data-vote="up">
-                    <div style="color:#43A047">
-                        <i class="fas fa-thumbs-up"></i></div>
+                        <i class="fas fa-thumbs-up green"></i>
                 </button>
 				<button class="vote down" data-id="{{post.id}}" data-vote="down">
-                    <div style="color:#E53935">
-                        <i class="fas fa-thumbs-down"></i></div>
+                        <i class="fas fa-thumbs-down red"></i>
                     </button>
 			{{/if}}    
 		{{/if}}
