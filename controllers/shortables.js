@@ -303,7 +303,9 @@ module.exports = function(app) {
 			// console.log(req.body);
 			post.UserId = req.user.id;
 			db.Post.create(post).then(function(result) {
-				res.json({ id: result.insertId });
+				res.json({ id: result.id });
+			}).catch(function(error){
+				res.json({ msg: error.message});
 			});
 		}
 		else {

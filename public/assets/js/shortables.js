@@ -16,26 +16,40 @@ $(function() {
 // <button class="vote_up" data-id="{{post.id}}">Up</button>
   function addShortable(ev){
     ev.preventDefault();
+    
     let new_title = $("#title_input").val().trim();
     let new_content = $("#content_input").val().trim();
+
     if(!new_title || !new_content){
       $("#new_post_message").text("Title and Content can not be empty!");
-      //alert("Title and Content can not be empty!");
       return;
     }
+    else if(new_title.length<2 || new_title.length > 100){
+      $("#new_post_message").text("Title must be between 2 and 100 symbols!");
+      return;
+    }
+    else if(new_content.length < 10){
+      $("#new_post_message").text("Content must be at least 10 symbols!");
+      return;
+    }
+
     $("#new_post_message").empty();
     let shortable = {
       title: new_title,
       content: new_content,
       published: $('#publish').is(":checked")
     };
-    // console.log("trying to create new post:"+JSON.stringify(shortable));
     $.ajax("/api/shortable/add", {
       type: "POST",
       data: shortable
 
-    }).then( function(){
-        window.location.pathname = "/api/shortables/all";
+    }).then( function(result){
+      if( result.id ){ 
+          window.location.pathname = "/api/shortables/all";
+      }
+      else{
+        $("#new_post_message").text(result.msg);
+      }
     });
   }
 

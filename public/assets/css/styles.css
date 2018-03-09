@@ -57,7 +57,7 @@ nav, footer {
 }
 
 .box {
-    width: 40%;
+    width: 50%;
     background-color: aliceblue;
     border: 1px solid grey;
     padding: 30px;
@@ -115,7 +115,10 @@ a:hover {
 }
 
 #title_input {
-    width: 350px;
+    width: 90%;
+}
+#title_content {
+    width: 90%;
 }
 
 #new_post_message {
