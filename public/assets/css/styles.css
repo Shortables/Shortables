@@ -1,12 +1,12 @@
 html {
     height: 100%;
-    background: skyblue,
+    background: skyblue;
 }
 
 body {
     padding-top: 75px;
     background: linear-gradient(to bottom, #104E83, skyblue);
-    background-repeat: space;
+    background-repeat: round;
     height: 100%;
 }
 
