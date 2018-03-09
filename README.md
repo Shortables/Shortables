@@ -20,8 +20,10 @@ Guests can register to enable submission of new posts, as well as like/dislike u
 
 <img src="public/assets/images/Readme_Register.png">
 <br>
+Like/Dislike/Favorite
 <img src="public/assets/images/Readme_LoggedIn.png">
 <br>
+Add submission
 <img src="public/assets/images/Readme_Add.png">
 
 # Technologies
