@@ -1,0 +1,127 @@
+html {
+    height: 100%;
+    background: skyblue;
+}
+
+body {
+    padding-top: 75px;
+    height: 100%;
+    min-height: 100vh;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+    background: skyblue;
+    background-repeat: no-repeat;
+    background: -webkit-linear-gradient( to bottom, #104E83, skyblue);
+    background: -moz-linear-gradient( to bottom, #104E83, skyblue);
+    background: -ms-linear-gradient( to bottom, #104E83, skyblue);
+    background: -o-linear-gradient( to bottom, #104E83, skyblue);
+    background: linear-gradient( to bottom, #104E83, skyblue);
+/*
+    background: linear-gradient(to bottom, #104E83, skyblue);
+    background-repeat: round;
+    height: 100%;
+*/
+
+}
+
+footer {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+}
+
+nav, footer {
+    background-color: #104E83;
+    color: white;
+    box-shadow: 5px 5px 15px #104E83;
+}
+
+.top-menu {
+    text-align: center;
+}
+
+.navbar-brand {
+    font-family: 'Courgette', cursive;
+    font-size: 22px;
+}
+
+.card {
+    width: 75%;
+    margin: auto;
+}
+
+.space {
+    padding: 3%;
+}
+
+.box {
+    width: 40%;
+    background-color: aliceblue;
+    border: 1px solid grey;
+    padding: 30px;
+    padding-bottom: 45px;
+}
+
+.btn {
+    border: 1px solid grey;
+    float: right;
+    position: relative;
+}
+
+.green {
+    color: #43A047;
+}
+
+.red {
+    color: #E53935;
+}
+
+.pink {
+    color: #E91E63;
+}
+
+.modal {
+    margin: auto 0;
+}
+
+p {
+    color: black;
+    font-family: Avenir, sans-serif;
+}
+
+h1, h2, h3 {
+    color: midnightblue;
+}
+
+a {
+    color: white;
+}
+
+a:hover {
+    color: skyblue;
+    text-decoration: underline;
+}
+.username_top{
+    /*margin-left: 100px;*/
+    font-family: 'Courgette', cursive; 
+    font-size: 20px;
+}
+
+.modal {
+  width: 800px;
+  margin: 0 auto; 
+}
+
+#title_input {
+    width: 350px;
+}
+
+#new_post_message {
+    font-weight: bold;
+    color: red;
+}
+ .card-header {
+    color: #1178b2;
+ }
