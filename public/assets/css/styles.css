@@ -63,7 +63,11 @@ nav, footer {
 }
 
 .pink {
-    color: #E91E63,
+    color: #E91E63;
+}
+
+.modal {
+    margin: auto 0;
 }
 
 p {
