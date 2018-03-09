@@ -1,6 +1,9 @@
 $(function() {
 // $(document).ready(function() {
   
+  $('li.active').removeClass('active');
+  $('a[href="' + location.pathname + '"]').closest('li').addClass('active'); 
+
   $("#new_post_submit").on("click", addShortable);
   $("#shortables-list").on("click", ".vote", vote);
   $("#shortables-list").on("click", ".fav_toggle", toggleFavorites);
@@ -8,16 +11,25 @@ $(function() {
 
   $(".short-title").on("click", show_shortable);
 
+  $("#new_post_message").empty();
+
 // <button class="vote_up" data-id="{{post.id}}">Up</button>
   function addShortable(ev){
     ev.preventDefault();
+    let new_title = $("#title_input").val().trim();
+    let new_content = $("#content_input").val().trim();
+    if(!new_title || !new_content){
+      $("#new_post_message").text("Title and Content can not be empty!");
+      //alert("Title and Content can not be empty!");
+      return;
+    }
+    $("#new_post_message").empty();
     let shortable = {
-      title: $("#title_input").val().trim(),
-      content: $("#content_input").val().trim(),
+      title: new_title,
+      content: new_content,
       published: $('#publish').is(":checked")
     };
-    console.log("trying to create new post:"+JSON.stringify(shortable));
-    //!!!validate input
+    // console.log("trying to create new post:"+JSON.stringify(shortable));
     $.ajax("/api/shortable/add", {
       type: "POST",
       data: shortable
@@ -72,11 +84,9 @@ $(function() {
 
   function show_shortable(){
     let post_id = $(this).data("id");
-    console.log(post_id);
     $("#short_title").empty();
     $("#short_content").empty();
     $.get("/api/shortable/"+post_id, function(data){
-      console.log(data);
       if(data){
         $("#short_title").text(data.title);
         $("#short_content").text(data.content);
@@ -84,5 +94,4 @@ $(function() {
       }
     }); 
   }
-
 });
