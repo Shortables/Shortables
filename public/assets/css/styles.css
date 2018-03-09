@@ -89,3 +89,9 @@ a:hover {
     font-family: 'Courgette', cursive; 
     font-size: 20px;
 }
+
+.modal {
+  width: 800px;
+  margin: 0 auto; 
+}
+
