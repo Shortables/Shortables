@@ -1,8 +1,6 @@
 # Shortables
 
-Shortables is project 2 of 3 for the UC Berkeley Full Stack Programming Boot Camp.
-
-It is a networking app for lovers of literature, reading and writing.
+Shortables is a networking app for lovers of literature, reading and writing.
 
 <a href="https://shortables.herokuapp.com/">Here</a> is a link to the project on Heroku.
 
